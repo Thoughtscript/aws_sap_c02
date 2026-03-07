@@ -2,7 +2,7 @@
 
 ## Libraries
 
-There are several overlapping and independent libraries, tools:
+There are several overlapping and independent libraries, tools, and skills:
 
 1. `awsglue`
 1. `botocore`
@@ -10,9 +10,11 @@ There are several overlapping and independent libraries, tools:
 1. `boto3`
 1. Want to test using the official `public.ecr.aws/glue/aws-glue-libs:5` public Amazon AWS Documentation Docker Image.
 1. Apache Spark
+1. Hadoop
+1. Java
 1. Amazon AWS Glue ETL, EMR
 
-> AWS Glue is mostly covered in the [AWS Certified Data Engineer - Associate](https://aws.amazon.com/certification/certified-data-engineer-associate/) learning path (and not the **AWS DevOps Pro** or **AWS Solutions Architect Pro** paths).
+> AWS Glue is mostly covered in the [AWS Certified Data Engineer - Associate](https://aws.amazon.com/certification/certified-data-engineer-associate/) learning path (and not the **AWS DevOps Pro** or **AWS Solutions Architect Pro** paths) but it's still useful to have some knowledge of these important libraries, tools, and skills.
 
 ## Use
 
