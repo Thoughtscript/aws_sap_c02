@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
         # sys.argv must be used here not argparse
         sys.argv += ['--JOB_NAME', 'example'] # arg flag passed here using comprehensions syntax
-        sys.argv += ['--JOB_RUN_ID', '1']
+        sys.argv += ['--JOB_RUN_ID', '1'] # this must also be present or errors thrown
         args = getResolvedOptions(sys.argv, ["JOB_NAME"]) # Chose the relevant ID
         gc = GlueContext(sc)
         job = Job(gc)

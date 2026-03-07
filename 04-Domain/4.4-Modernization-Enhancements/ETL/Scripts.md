@@ -21,7 +21,7 @@ Couple ways to interact with this:
         -v ~/.aws:/home/hadoop/.aws \
         -e AWS_PROFILE=test \
         --name glue5_pyspark \
-        MY_DOCKER_IMAGE_ID \
+        MY_DOCKER_IMAGE_SHA \
         pyspark
     ```
 
@@ -33,7 +33,7 @@ Couple ways to interact with this:
         -v ~/.aws:/home/hadoop/.aws \
         -e AWS_PROFILE=test \
         --name glue5_pyspark \
-        MY_DOCKER_IMAGE_ID \
+        MY_DOCKER_IMAGE_SHA \
         pyspark
     ```
 
@@ -43,7 +43,7 @@ Couple ways to interact with this:
         -v ~/.aws:/home/hadoop/.aws \
         -e AWS_PROFILE=test \
         --name glue5_pyspark \
-        MY_DOCKER_IMAGE_ID \
+        MY_DOCKER_IMAGE_SHA \
          spark-submit --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 boto-example.py
     ```
 
@@ -74,6 +74,9 @@ job.commit()
 
 sc.stop()
 ```
+```python
+exit()
+```
 
 ### Boto Client
 
@@ -82,6 +85,7 @@ This simulates using the `boto3` Client to interact with AWS Resources using `st
 > For instance: the `~/.aws` credentials are completely faked and I cannot find a complete example with config doing this (that works) on the internet thus far. (`boto3` must have a config and it varies from the standard `aws-cli` configs...)
 
 ```python
+# Example for pasting into Interactive Terminal Exec
 import botocore.session
 from botocore.stub import Stubber
 
@@ -93,6 +97,9 @@ stubber.add_response('create_job', mock_response, expected_params)
 stubber.activate()
 response = glue_client.create_job(Name='test-job-name',Role='arn:aws:iam::123456789012:role/test-role',Command={'Name': 'glueetl', 'ScriptLocation': 's3://my-bucket/script.py'})
 print(response) # {'Name': 'test-job-name', 'ResponseMetadata': {'HTTPStatusCode': 200}}
+```
+```python
+exit()
 ```
 
 References:
