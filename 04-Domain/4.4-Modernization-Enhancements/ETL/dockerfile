@@ -1,0 +1,16 @@
+# Official Amazon Docker example
+FROM amazon/aws-glue-libs:5.0.0-arm64
+
+RUN echo "Creating working dir and copying files"
+COPY . .
+
+# update pip globally within the container
+RUN python3 -m pip install --upgrade pip
+
+# See: https://github.com/jerdoe/glue_libs_sso/blob/main/Dockerfile
+## Must inherit this from the Amazon Glue Base Image
+
+# Be forewarned: the Amazon distro has some fairly stringent limitations
+## bash cannot be run through CMD below
+## nor can it be the entrypoint through exec -it
+ENTRYPOINT ["bash","-l"]
