@@ -2,7 +2,7 @@
 
 Couple ways to interact with this:
 
-1. `Exec` into the **Container** through [REPL](https://docs.aws.amazon.com/glue/latest/dg/develop-local-docker-image.html#develop-local-docker-image-setup-run)
+1. `exec` into the **Container** through [REPL](https://docs.aws.amazon.com/glue/latest/dg/develop-local-docker-image.html#develop-local-docker-image-setup-run)
 
     ```bash
     docker run -it --rm \
@@ -12,6 +12,8 @@ Couple ways to interact with this:
         public.ecr.aws/glue/aws-glue-libs:5 \
         pyspark
     ```
+
+1. `build` and do so:
     ```bash
     docker build .
 
@@ -22,6 +24,8 @@ Couple ways to interact with this:
         MY_DOCKER_IMAGE_ID \
         pyspark
     ```
+
+1. `pull` and do so:
     ```bash
     docker pull public.ecr.aws/glue/aws-glue-libs:5 
 
