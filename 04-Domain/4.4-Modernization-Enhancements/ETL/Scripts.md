@@ -2,7 +2,7 @@
 
 ## Libraries
 
-There are several overlapping and independent libraries:
+There are several overlapping and independent libraries, tools:
 
 1. `awsglue`
 1. `botocore`
@@ -16,7 +16,7 @@ There are several overlapping and independent libraries:
 
 ## Use
 
-Couple ways to interact with this:
+Several ways to interact with this in shell:
 
 1. `exec` into the **Container** through [REPL](https://docs.aws.amazon.com/glue/latest/dg/develop-local-docker-image.html#develop-local-docker-image-setup-run)
 

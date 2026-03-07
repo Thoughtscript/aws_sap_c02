@@ -8,7 +8,8 @@
 
 > https://render-static-fs.onrender.com/study_guide_notes_2023.html
 
-Study notes in prep for the **AWS SAP C02**.
+Study notes in prep for the **AWS SAP C02**. 
+* Like the **AWS DOP C02** it has a `50%` to `70%` estimated fail rate - wanted to practice up a bit more before scheduling.
 
 ## Setup and Use
 
