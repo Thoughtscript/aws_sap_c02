@@ -7,7 +7,7 @@ Couple ways to interact with this:
     ```bash
     docker run -it --rm \
         -v ~/.aws:/home/hadoop/.aws \
-        -e AWS_PROFILE=$PROFILE_NAME \
+        -e AWS_PROFILE=test \
         --name glue5_pyspark \
         public.ecr.aws/glue/aws-glue-libs:5 \
         pyspark
@@ -19,7 +19,7 @@ Couple ways to interact with this:
 
     docker run -it --rm \
         -v ~/.aws:/home/hadoop/.aws \
-        -e AWS_PROFILE=$PROFILE_NAME \
+        -e AWS_PROFILE=test \
         --name glue5_pyspark \
         MY_DOCKER_IMAGE_ID \
         pyspark
@@ -31,10 +31,20 @@ Couple ways to interact with this:
 
     docker run -it --rm \
         -v ~/.aws:/home/hadoop/.aws \
-        -e AWS_PROFILE=$PROFILE_NAME \
+        -e AWS_PROFILE=test \
         --name glue5_pyspark \
         MY_DOCKER_IMAGE_ID \
         pyspark
+    ```
+
+1. Through `spark-submit`:
+    ```bash
+    docker run -it --rm \
+        -v ~/.aws:/home/hadoop/.aws \
+        -e AWS_PROFILE=test \
+        --name glue5_pyspark \
+        MY_DOCKER_IMAGE_ID \
+         spark-submit --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 boto-example.py
     ```
 
 ## Scripts
@@ -67,48 +77,22 @@ sc.stop()
 
 ### Boto Client
 
-This simulates using the `boto3` Client to interact with AWS Resources using `stubber` (a Mocking and Testing library from AWS Client calls).
+This simulates using the `boto3` Client to interact with AWS Resources using `stubber` (a Mocking and Testing library from AWS Client calls). This is a very specific approach that attempts to do away with `boto3` configuration for a fully mocked client.
+
+> For instance: the `~/.aws` credentials are completely faked and I cannot find a complete example with config doing this (that works) on the internet thus far. (`boto3` must have a config and it varies from the standard `aws-cli` configs...)
 
 ```python
 import botocore.session
 from botocore.stub import Stubber
 
-    def create_glue_job(client, job_name, role_arn, command):
-        response = client.create_job(
-            Name=job_name,
-            Role=role_arn,
-            Command=command
-        )
-        return response['Name']
-
-    glue_client = boto3.client('glue', rregion_name='us-west-2')
-
-    mock_response = {
-        'Name': 'test-job-name',
-        'ResponseMetadata': {
-            'HTTPStatusCode': 200
-        }
-    }
-    expected_params = {
-        'Name': 'test-job-name',
-        'Role': 'arn:aws:iam::123456789012:role/test-role',
-        'Command': {'Name': 'glueetl', 'ScriptLocation': 's3://my-bucket/script.py'}
-    }
-    
-    with Stubber(glue_client) as stubber:
-        # Stubbed and mocked calls
-        stubber.add_response('create_job', mock_response, expected_params)
-
-        job_name = create_glue_job(
-            glue_client,
-            'test-job-name',
-            'arn:aws:iam::123456789012:role/test-role',
-            {'Name': 'glueetl', 'ScriptLocation': 's3://my-bucket/script.py'}
-        )
-
-        assert job_name == 'test-job-name'
-        
-        stubber.assert_no_pending_responses()
+glue_client = botocore.session.get_session().create_client('glue')
+mock_response = {'Name': 'test-job-name','ResponseMetadata': {'HTTPStatusCode': 200} }
+expected_params = {'Name': 'test-job-name','Role': 'arn:aws:iam::123456789012:role/test-role','Command': {'Name': 'glueetl', 'ScriptLocation': 's3://my-bucket/script.py'}}
+stubber = Stubber(glue_client)
+stubber.add_response('create_job', mock_response, expected_params)
+stubber.activate()
+response = glue_client.create_job(Name='test-job-name',Role='arn:aws:iam::123456789012:role/test-role',Command={'Name': 'glueetl', 'ScriptLocation': 's3://my-bucket/script.py'})
+print(response) # {'Name': 'test-job-name', 'ResponseMetadata': {'HTTPStatusCode': 200}}
 ```
 
 References:

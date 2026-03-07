@@ -22,3 +22,4 @@ For convenience, I've made this into **Dockerized** examples.
 1. https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming.html
 1. https://docs.aws.amazon.com/glue/latest/dg/spark_and_pyspark.html
 1. https://docs.aws.amazon.com/glue/latest/dg/develop-local-docker-image.html
+1. https://docs.aws.amazon.com/botocore/latest/reference/stubber.html
