@@ -77,8 +77,7 @@ from botocore.stub import Stubber
         )
         return response['Name']
 
-    session = botocore.session.Session()
-    glue_client = session.create_client('glue', region_name='us-west-2')
+    glue_client = boto3.client('glue', rregion_name='us-west-2')
 
     mock_response = {
         'Name': 'test-job-name',
