@@ -151,6 +151,7 @@ subber.activate()
 ```
 
 ```python
+# Example for pasting into Interactive Terminal Exec
 import boto3
 import botocore.session
 from botocore.stub import Stubber
