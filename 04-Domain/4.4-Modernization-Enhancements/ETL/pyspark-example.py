@@ -34,7 +34,7 @@ if __name__ == '__main__':
         ])   
         department_df.show()     
 
-        # query predicate doesn't use df but entity in df
+        # query predicate uses dataframe
         people_df \
             .filter(people_df.age >= 35) \
             .join(department_df, people_df.deptId == department_df.id)  \
