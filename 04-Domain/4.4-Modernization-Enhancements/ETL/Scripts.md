@@ -65,6 +65,26 @@ Several ways to interact with this in shell:
          spark-submit --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 boto-example.py
     ```
 
+1. Through `spark-submit`:
+    ```bash
+    docker run -it --rm \
+        -v ~/.aws:/home/hadoop/.aws \
+        -e AWS_PROFILE=test \
+        --name glue5_pyspark \
+        MY_DOCKER_IMAGE_SHA \
+         spark-submit --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 pyspark-example.py
+    ```
+
+1. Through `spark-submit`:
+    ```bash
+    docker run -it --rm \
+        -v ~/.aws:/home/hadoop/.aws \
+        -e AWS_PROFILE=test \
+        --name glue5_pyspark \
+        MY_DOCKER_IMAGE_SHA \
+         spark-submit --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 boto3-pyspark-example.py
+    ```
+
 > Spinning up actual Amazon AWS Glue or AWS EMR resources can be expensive even for testing and its proven a bit tricky to find a *bona fide* AWS Cloud simulation/mock.
 
 ## Scripts
@@ -122,7 +142,36 @@ print(response) # {'Name': 'test-job-name', 'ResponseMetadata': {'HTTPStatusCode
 exit()
 ```
 
-References:
+The `boto3` Client can also be used with `Stubber`:
+
+```python
+glue_client = boto3.client("glue", "us-east-1")
+stubber = Stubber(glue_client)
+subber.activate()
+```
+
+```python
+import boto3
+import botocore.session
+from botocore.stub import Stubber
+
+glue_client = boto3.client("glue", "us-east-1")
+stubber = Stubber(glue_client)
+# Note sure what ISO Format but from timestamps generated through datetime.datetime
+## hhttps://docs.aws.amazon.com/boto3/latest/reference/services/glue/client/get_job_run.html#
+mock_response = {"JobRun":{"Id":"string","Attempt":123,"PreviousRunId":"string","TriggerName":"string","JobName":"string","JobMode":"SCRIPT","StartedOn":"2015-01-01 00:00:00","LastModifiedOn":"2015-01-01 00:00:00","CompletedOn":"2015-01-01 00:00:00","JobRunState":"SUCCEEDED","Arguments":{"string":"string"},"ErrorMessage":"string","PredecessorRuns":[{"JobName":"string","RunId":"string"}],"AllocatedCapacity":123,"ExecutionTime":123,"Timeout":123,"MaxCapacity":123,"WorkerType":"Standard","NumberOfWorkers":123,"SecurityConfiguration":"string","LogGroupName":"string","NotificationProperty":{"NotifyDelayAfter":123},"GlueVersion":"string","DPUSeconds":123,"ExecutionClass":"FLEX","MaintenanceWindow":"string","ProfileName":"string"}}
+expected_params = { "JobName": "example-01", "RunId": "run-uuid-0000-0000-0000" }
+stubber.add_response("get_job_run", mock_response, expected_params)
+stubber.activate()
+
+response = glue_client.get_job_run(JobName="example-01", RunId="run-uuid-0000-0000-0000")
+print(response) # {'JobRun': {'Id': 'string', 'Attempt': 123, 'PreviousRunId': 'string', 'TriggerName': 'string', 'JobName': 'string', 'JobMode': 'SCRIPT', 'StartedOn': '2015-01-01 00:00:00', 'LastModifiedOn': '2015-01-01 00:00:00', 'CompletedOn': '2015-01-01 00:00:00', 'JobRunState': 'SUCCEEDED', 'Arguments': {'string': 'string'}, 'ErrorMessage': 'string', 'PredecessorRuns': [{'JobName': 'string', 'RunId': 'string'}], 'AllocatedCapacity': 123, 'ExecutionTime': 123, 'Timeout': 123, 'MaxCapacity': 123, 'WorkerType': 'Standard', 'NumberOfWorkers': 123, 'SecurityConfiguration': 'string', 'LogGroupName': 'string', 'NotificationProperty': {'NotifyDelayAfter': 123}, 'GlueVersion': 'string', 'DPUSeconds': 123, 'ExecutionClass': 'FLEX', 'MaintenanceWindow': 'string', 'ProfileName': 'string'}}
+```
+
+## References:
 1. https://dev.to/515hikaru/practical-example-of-using-boto3-stubber-class-unit-tests-i5b
 1. https://docs.aws.amazon.com/botocore/latest/reference/stubber.html
 1. https://dev.to/cwprogram/python-aws-testing-with-boto-stubber-272k
+1. https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html
+1. https://docs.aws.amazon.com/code-library/latest/ug/python_3_glue_code_examples.html
+1. https://aws.amazon.com/blogs/big-data/develop-and-test-aws-glue-5-0-jobs-locally-using-a-docker-container/
