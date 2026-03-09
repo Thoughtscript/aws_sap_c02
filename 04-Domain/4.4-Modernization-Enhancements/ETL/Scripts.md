@@ -18,6 +18,8 @@ There are several overlapping and independent libraries, tools, and skills:
 
 ## Use
 
+> Please note that the AWS Container injects `sc` and other imports directly into the PySpark session.
+
 Several ways to interact with this in shell:
 
 1. `exec` into the **Container** through [REPL](https://docs.aws.amazon.com/glue/latest/dg/develop-local-docker-image.html#develop-local-docker-image-setup-run)
