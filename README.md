@@ -11,6 +11,8 @@
 Study notes in prep for the **AWS SAP C02**. 
 * Like the **AWS DOP C02** it has a `50%` to `70%` estimated fail rate - wanted to practice up a bit more before scheduling.
 
+> Some remaining topics of interest.
+
 ## Setup and Use
 
 For convenience, I've made this into **Dockerized** examples.
